@@ -9,6 +9,13 @@ describe "User pages" do
     it {should have_content('Sign up')}
     it {should have_title(full_title('Sign Up'))}
   end
+  
+  describe "signin page" do
+    before {visit signin_path}
+    
+    it {should have_content('Sign in')}
+    it {should have_title(full_title('Sign In'))}
+  end
 end
 
 # require 'spec_helper'
