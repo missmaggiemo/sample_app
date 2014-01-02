@@ -2,6 +2,7 @@
 
 <div id="error_explanation">
 	<div class="alert alert-error">
+		<!-- this is different from the flash-success, even though it uses a similar content tag -->
 		The form contains <%= pluralize(@user.errors.count, "error") %>.
 	</div>
 	<ul>
