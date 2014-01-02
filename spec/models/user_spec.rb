@@ -1,3 +1,5 @@
+# ALWAYS WRITE TESTS FIRST
+
 require 'spec_helper'
 
 # describe User do
@@ -7,13 +9,22 @@ require 'spec_helper'
 
 describe User do
   
-  before {@user = User.new(name: "Example", email: "Example@sample.com")}
+  before {@user = User.new(name: "Example", email: "Example@sample.com", password: "foobar", password_confirmation: "foobar")}
   
   subject {@user}
   
-  it {should be_valid}
+  # this is how you test to make sure you have the rigt columns in your DB 
   it {should respond_to(:name)}
   it {should respond_to(:email)}
+  it {should respond_to(:password_digest)}
+  it {should respond_to(:password)}
+  it {should respond_to(:password_confirmation)}
+  it {should respond_to(:authenticate)}
+  
+  it {should be_valid}
+  
+  
+  # test for presence confirmartion
   
   describe "when name not present" do
     before { @user.name = "" }
@@ -24,6 +35,8 @@ describe User do
     before { @user.email = "" }
     it {should_not be_valid}
   end
+  
+  # test for valid email checks
   
   describe "when email format is invalid" do
     it "should be invalid" do
@@ -43,6 +56,8 @@ describe User do
     end
   end
   
+  # test for uniqueness checks
+  
   describe "when email address is already taken" do
     before  do
       user_with_same_email = @user.dup
@@ -53,4 +68,46 @@ describe User do
     it {should_not be_valid}
   end
   
+  # test for password stuff-- presence
+  
+  describe "when password is not present" do
+    before do
+      @user = User.new(name: "Tom", email: "Tom@Jerry.com", password: "", password_confirmation: "")
+    end
+    it {should_not be_valid}
+  end
+  
+  # test for password stuff-- confirmation
+  
+  describe "when password doesn't match confirmation" do
+    before {@user.password_confirmation = "mismatch"}
+    it {should_not be_valid}
+  end
+  
+  # test for password stuff-- min length
+  
+  describe "with a password that's too short" do
+    before {@user.password = @user.password_confirmation = "a"*5}
+    it {should be_invalid}
+  end
+  
+  # test for password stuff-- authenticate
+  
+  describe "return value of authenticate method" do
+    before {@user.save}
+    let(:found_user) {User.find_by(email: @user.email)}
+    
+    describe "with valid password" do
+      it {should eq found_user.authenticate(@user.password)}
+    end
+    
+    describe "with invalid password" do
+      let(:user_for_invalid_password) {found_user.authenticate("invalid")}
+      
+      it {should_not eq user_for_invalid_password}
+      specify {expect(user_for_invalid_password).to be_false}
+      # 'specify' is a synonym for 'it', used for readability
+    end
+  end
+    
 end
