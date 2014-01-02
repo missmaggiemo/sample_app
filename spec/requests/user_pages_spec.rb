@@ -13,7 +13,30 @@ describe "User pages" do
     let(:heading) {'Sign Up'}
     let(:page_title) {'Sign Up'}
     
-    it_should_behave_like "all pages"
+    describe "layout" do
+      it_should_behave_like "all pages"
+    end
+    
+    let(:submit) {"Create my account"}
+    
+    describe "signup button" do
+      it "doesn't add blank user" do
+        expect {click_button submit}.not_to change(User, :count)
+      end
+    
+      describe "with valid info" do
+        before do
+          fill_in "Name", with: "Freddy"
+          fill_in "Email", with: "Freddy@mercury.com"
+          fill_in "Password", with: "bohemian"
+          fill_in "Confirmation", with: "bohemian"
+        end
+      
+        it "should add user" do
+          expect {click_button submit}.to change(User, :count).by(1)
+        end
+      end
+    end
   end
   
   describe "signin page" do
