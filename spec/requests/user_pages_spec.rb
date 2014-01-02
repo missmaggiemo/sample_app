@@ -23,6 +23,16 @@ describe "User pages" do
     
     it_should_behave_like "all pages"
   end
+  
+  describe "profile page" do
+    before {visit user_path(user)}
+    let(:user) {FactoryGirl.create(:user)}
+    # as opposed to User.create(name: 'Barney', email: 'Barney@rubble.com', password: 'yabbadabba', password_confirmation: 'yabbadabba')
+    
+    it {should have_content(user.name)}
+    it {should have_title(user.name)}
+  end
+  
 end
 
 # require 'spec_helper'
