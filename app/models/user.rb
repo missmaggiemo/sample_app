@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  before_save { email.downcase! }
+  before_save { self.email.downcase! }
+  before_create :create_remember_token
   validates :name, presence: true, length: {maximum: 50}
   VALID_EMAIL_REGEX = /\A[\w+\-.]+\@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   # breakdown of regex: 
@@ -16,5 +17,21 @@ class User < ActiveRecord::Base
   # this one line enables all the password stuff-- :password is entered by user, encrypted password is saved in DB and matched with user's password each time they enter their password
   # are the only passwords that go through the program are encrypted? where's the encryption algorithm? is there a standard algorithm? I hope it's randomized.
   validates :password, length: {minimum: 6}
+  
+  def User.new_remember_token
+    SecureRandom.urlsafe_base64
+  end
+  
+  def User.encrypt(token)
+    Digest::SHA1.hexdigest(token.to_s)
+  end
+  
+  # private methods
+  
+  private
+  
+  def create_remember_token
+    self.remember_token = User.encrypt(User.new_remember_token)
+  end
   
 end

@@ -6,10 +6,9 @@ require 'spec_helper'
 #   pending "add some examples to (or delete) #{__FILE__}"
 # end
 
-
 describe User do
   
-  before {@user = User.new(name: "Example", email: "Example@sample.com", password: "foobar", password_confirmation: "foobar")}
+  before {@user = User.new(name: "Douglas", email: "Douglas@adams.com", password: "dontpanic", password_confirmation: "dontpanic")}
   
   subject {@user}
   
@@ -19,6 +18,7 @@ describe User do
   it {should respond_to(:password_digest)}
   it {should respond_to(:password)}
   it {should respond_to(:password_confirmation)}
+  it {should respond_to(:remember_token)}
   it {should respond_to(:authenticate)}
   
   it {should be_valid}
@@ -121,5 +121,11 @@ describe User do
       # 'specify' is a synonym for 'it', used for readability
     end
   end
-    
+  
+  describe "remembers token" do
+    before {@user.save}
+    its(:remember_token) {should_not be_blank}
+    # same as it {expect(@user.remember_token).to_not be_blank}
+  end
+  
 end

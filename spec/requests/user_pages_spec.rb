@@ -54,13 +54,15 @@ describe "User pages" do
     end
   end
   
-  describe "signin page" do
-    before {visit signin_path}
-    let(:heading) {'Sign In'}
-    let(:page_title) {'Sign In'}
-    
-    it_should_behave_like "all pages"
-  end
+  # describe "signin page" do
+#     before {visit signin_path}
+#     let(:heading) {'Sign In'}
+#     let(:page_title) {'Sign In'}
+#     
+#     it_should_behave_like "all pages"
+#   end
+
+# test for this in authentication pages
   
   describe "profile page" do
     before {visit user_path(user)}
