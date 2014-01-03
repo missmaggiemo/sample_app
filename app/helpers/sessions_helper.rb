@@ -27,6 +27,10 @@ module SessionsHelper
     # the first time .current_user is called, the ethod will call find_by
   end
   
+  def current_user?(user)
+    user == current_user
+  end
+  
   def sign_out
     current_user.update_attribute(:remember_token, User.encrypt(User.new_remember_token))
     cookies.delete(:remember_token)
