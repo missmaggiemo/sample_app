@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     if @user.save
       # if the user has entered all the information
       sign_in @user
+      # from sessions_helper.rb
       flash[:success] = "Welcome to the Sample App!"
       # the code to display the flash is in application.html.erb
       redirect_to @user
@@ -24,6 +25,22 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     # for show.html.erb, render page based on user.id
+  end
+  
+  def edit
+    @user = User.find(params[:id])
+  end
+  
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes(user_params)
+      flash[:success] = "Profile updated"
+      # sign_in @user
+      # was having problem with specs-- you shouldn't be able to update user info w/out being signed in
+      redirect_to @user
+    else
+      render 'edit'
+    end
   end
   
   # private methods
