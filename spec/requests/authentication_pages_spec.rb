@@ -33,6 +33,12 @@ describe "Authentication" do
       it {should have_title(user.name)}
       it {should have_link('Profile', href: user_path(user))}
       it {should have_link('Sign out', href: signout_path)}
+      
+      describe "followed by signout" do
+        before {click_link "Sign out"}
+        it {should have_link("Sign in")}
+      end
+      
     end
   end
   
