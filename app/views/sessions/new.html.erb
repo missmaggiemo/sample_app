@@ -5,15 +5,20 @@
 
 <%= form_tag sessions_path do %>
 
-<div class="field">
+<div class="row">
+	<div class="span6 offset3">
 	<%= label_tag :email%>
 	<%= text_field_tag :email, params[:email]%>
-</div>
-<div class="field">
+	
 	<%= label_tag :password%>
 	<%= text_field_tag :password%>
+	
+	<%= button_tag "Sign in", class: "btn btn-large btn-primary"%>
+	
+	</div>
 </div>
-<div class="actions"><%= submit_tag "Sign in"%></div>
+
+<!-- <div class="actions"><%= submit_tag "Sign in"%></div> -->
 
 <% end %>
 
