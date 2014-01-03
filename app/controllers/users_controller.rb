@@ -7,6 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       # if the user has entered all the information
+      sign_in @user
       flash[:success] = "Welcome to the Sample App!"
       # the code to display the flash is in application.html.erb
       redirect_to @user
