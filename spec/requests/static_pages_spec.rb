@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'support/static_pages_utl'
+# all support pages are added by spec_helper
 
 describe "Static pages" do
   
@@ -43,9 +43,10 @@ describe "Static pages" do
     it_should_behave_like "all static pages"
   end
   
-  # check links
-  before {visit root_path}
-  it {should have_the_right_links_in_layout}
+  describe "check layout links" do
+    before {visit root_path}
+    it {should have_the_right_links_in_layout}
+  end
   
 end
 

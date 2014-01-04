@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'support/auth_pages_utl'
+# all support pages are added by spec_helper
 
 describe "Authentication" do
   
@@ -28,10 +28,16 @@ describe "Authentication" do
       before {sign_in user}
             
       it {should have_title(user.name)}
+      it {should have_link('Users', href: users_path)}
       it {should have_profile_link}
       it {should have_link('Settings', href: edit_user_path(user))}
       it {should have_signout_link}
       it {should_not have_signin_link}
+      
+      describe "index works" do
+        before {click_link "Users"}
+        it {should have_title("All Users")}
+      end
       
       describe "followed by signout" do
         before {click_link "Sign out"}
@@ -70,6 +76,12 @@ describe "Authentication" do
           before {patch user_path(user)}
           specify {expect(response).to redirect_to(signin_path)}
         end
+        
+        describe "visiting the user index" do
+          before {visit users_path}
+          it {should have_title("Sign In")}
+        end
+        
       end
     end
     

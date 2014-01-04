@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'support/user_pages_utl'
+# all support pages are added by spec_helper
 
 describe "User pages" do
   subject {page}
@@ -7,6 +7,29 @@ describe "User pages" do
   shared_examples_for "all pages" do
     it {should have_h1(heading)}
     it {should have_full_title(page_title)}
+  end
+  
+  describe "index" do
+    before do
+      sign_in FactoryGirl.create(:user)
+      FactoryGirl.create(:user, name: "Aurthur", email: "aurthur@king.com")
+      FactoryGirl.create(:user, name: "Lancelot", email: "lancelot@sir.com")
+      visit users_path
+    end
+    
+    it {should_not have_title("Sign In")}
+    
+    describe "layout" do
+      let(:heading) {'All Users'}
+      let(:page_title) {'All Users'}
+      it_should_behave_like "all pages"
+    end
+    
+    it "should list each user" do
+      User.all.each do |user|
+        expect(page).to have_selector('li', text: user.name)
+      end
+    end      
   end
   
   describe "signup page" do
