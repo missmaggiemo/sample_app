@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :signed_in_user, only: [:index, :edit, :update]
   before_action :correct_user, only: [:edit, :update]
+  before_action :admin_user, only: :destroy
   
   def index
     # @user = User.find(params[:id])
@@ -56,6 +57,12 @@ class UsersController < ApplicationController
     end
   end
   
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User deleted."
+    redirect_to users_url
+  end
+  
   
   # private methods
   
@@ -63,6 +70,7 @@ class UsersController < ApplicationController
   
   # users should not be able to access/edit all user account info-- for example, if there are admin users, there would be an admin parameter in the DB and if a user had access to that, he could make himself an admin
   def user_params
+    # strong params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
   
@@ -79,6 +87,10 @@ class UsersController < ApplicationController
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user?(@user)
+  end
+  
+  def admin_user
+    redirect_to(root_url) unless current_user.admin?
   end
   
 end
