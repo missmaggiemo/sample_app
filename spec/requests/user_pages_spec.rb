@@ -10,10 +10,9 @@ describe "User pages" do
   end
   
   describe "index" do
-    before do
-      sign_in FactoryGirl.create(:user)
-      FactoryGirl.create(:user, name: "Aurthur", email: "aurthur@king.com")
-      FactoryGirl.create(:user, name: "Lancelot", email: "lancelot@sir.com")
+    let(:user) {FactoryGirl.create(:user)}
+    before(:each) do
+      sign_in user
       visit users_path
     end
     
@@ -25,9 +24,16 @@ describe "User pages" do
       it_should_behave_like "all pages"
     end
     
-    it "should list each user" do
-      User.all.each do |user|
-        expect(page).to have_selector('li', text: user.name)
+    describe "pagination" do
+      before(:all) {30.times {FactoryGirl.create(:user)}}
+      after(:all) {User.delete_all}
+      
+      it {should have_selector('div.pagination')}
+    
+      it "should list each user" do
+        User.paginate(page: 1).each do |user|
+          expect(page).to have_selector('li', text: user.name)
+        end
       end
     end      
   end
@@ -53,7 +59,6 @@ describe "User pages" do
     
       describe "with brand-new valid info" do
         before {create_tom_cat}
-        after {follow_sign_out}
                 
         it {should have_signout_link}
         it {should have_name_in_title}

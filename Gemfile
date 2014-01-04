@@ -11,6 +11,11 @@ gem 'bcrypt-ruby', '3.1.2'
 # for authentication
 gem 'faker', '1.1.2'
 # for fake users
+gem 'will_paginate', '3.0.4'
+# pagination-- only 30 or so users show up on the index page at a time
+gem 'bootstrap-will_paginate', '0.0.9'
+# pretty pagination
+
 
 group :development, :test do
   # gem 'sqlite3', '1.3.8'
