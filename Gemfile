@@ -9,6 +9,8 @@ gem 'bootstrap-sass', '2.3.2.0'
 # pretty app with bootstrap
 gem 'bcrypt-ruby', '3.1.2'
 # for authentication
+gem 'faker', '1.1.2'
+# for fake users
 
 group :development, :test do
   # gem 'sqlite3', '1.3.8'
