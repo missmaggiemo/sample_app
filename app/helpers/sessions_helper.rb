@@ -37,4 +37,16 @@ module SessionsHelper
     self.current_user = nil
   end
   
+  def redirect_back_or(default)
+    redirect_to(session[:return_to] || default)
+    session.delete(:return_to)
+    # session is like a cookie that disappears when the browser is closed-- but w/in rails
+  end
+  
+  def store_location
+    session[:return_to] = request.url if request.get?
+    # request-- rails method-- gets URL of requested page
+    # request.get? ensures that the request.url only runs if the request is a 'get'
+  end
+  
 end

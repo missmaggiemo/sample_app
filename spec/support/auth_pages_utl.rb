@@ -18,6 +18,13 @@ def follow_sign_out
   click_link "Sign out"
 end
 
+RSpec::Matchers.define :render_edit_page do |message|
+  match do |page|
+    expect(page).to have_title('Edit User')
+  end
+end
+
+
 RSpec::Matchers.define :have_error_message do |message|
   match do |page|
     expect(page).to have_selector('div.alert.alert-error', text: message)

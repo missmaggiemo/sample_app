@@ -30,12 +30,17 @@ class UsersController < ApplicationController
     # for show.html.erb, render page based on user.id
   end
   
+  
+  # signed_in_user and correct_user are before_actions
+  
   def edit
     # @user = User.find(params[:id])
+    # already in correct_user
   end
   
   def update
     # @user = User.find(params[:id])
+    # already in correct_user
     if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
       # sign_in @user
@@ -45,6 +50,7 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
+  
   
   # private methods
   
@@ -57,11 +63,12 @@ class UsersController < ApplicationController
   
   # before filters
   def signed_in_user
-    redirect_to signin_url, notice: "Please sign in." unless signed_in?
-    # unless signed_in?
-#       flash[:notice] = "Please sign in."
-#       redirect_to signin_url
-#     end
+    # redirect_to signin_url, notice: "Please sign in." unless signed_in?
+    unless signed_in?
+      store_location
+      # in sessions helper
+      redirect_to signin_url, notice: "Please sign in."
+    end
   end
   
   def correct_user
