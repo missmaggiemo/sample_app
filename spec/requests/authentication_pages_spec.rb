@@ -68,6 +68,17 @@ describe "Authentication" do
         
         describe "after signing in" do 
           it {should render_edit_page}
+          
+          describe "when signing in again" do
+            before do
+              follow_sign_out
+              sign_in user
+            end
+          
+            it "should render profile page" do
+              expect(page).to have_h1(user.name)
+            end
+          end
         end
       end
       
