@@ -16,6 +16,7 @@ describe "User pages" do
       sign_in user
       visit users_path
     end
+    after {follow_sign_out}
     
     it {should_not have_title("Sign In")}
     
@@ -45,6 +46,7 @@ describe "User pages" do
       describe "as admin" do 
         let(:admin) {FactoryGirl.create(:admin)}
         before do
+          follow_sign_out
           sign_in admin
           visit users_path
         end
