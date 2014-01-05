@@ -58,6 +58,13 @@ describe "User pages" do
         end
         
         it {should_not have_link('delete', href: user_path(admin))}
+        
+        # describe "submitting a DELETE request on self" do
+#           before {delete user_path(admin)}
+#           specify {expect(response).to show_error}
+#         end
+# this generates undefined method `admin?' for nil:NilClass
+
       end
       
     end

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:index, :edit, :update]
+  before_action :signed_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user, only: :destroy
   
@@ -58,9 +58,15 @@ class UsersController < ApplicationController
   end
   
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User deleted."
-    redirect_to users_url
+    other_user = User.find(params[:id])
+    if current_user?(other_user)
+      redirect_to user_path(current_user), notice: "Don't be stupid."
+      # I'm not sure whether or not the notice really shows up, but the action definitely redirects to the user page.
+    else
+      other_user.destroy
+      flash[:success] = "User deleted."
+      redirect_to users_url
+    end
   end
   
   

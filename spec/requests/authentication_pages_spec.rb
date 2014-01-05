@@ -117,6 +117,26 @@ describe "Authentication" do
       
     end
     
+    describe "admin user" do
+      let(:user) {FactoryGirl.create(:user)}
+      let(:admin_role) {FactoryGirl.create(:admin)}
+      
+      before {sign_in admin_role, no_capybara: true}
+          
+      describe "submitting a DELETE request to the User#destroy action" do
+        before {delete user_path(user)}
+        specify {expect(response).not_to redirect_to(root_url)}
+      end
+      
+      describe "submitting a DELETE request on self" do
+        before {delete user_path(admin_role)}
+        describe "redirects to profile" do
+          specify {expect(response).to redirect_to(user_path(admin_role))}
+        end
+      end
+      
+    end
+    
   end
   
 end
