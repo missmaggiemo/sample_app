@@ -32,7 +32,7 @@ end
 
 RSpec::Matchers.define :have_profile_link do
   match do |page|
-    expect(page).to have_link('Profile', href: user_path(user))
+    expect(page).to have_link('Profile')
   end
 end
 

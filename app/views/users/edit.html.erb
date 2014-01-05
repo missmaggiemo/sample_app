@@ -4,28 +4,10 @@
 
 <div class="row">
 	<div class="span6 offset3">
-		<%= form_for(@user) do |f|%>
-		
-			<%= render 'shared/error_messages' %>
-		
-			<%= f.label :name%>
-			<%= f.text_field :name%>
-		
-			<%= f.label :email%>
-			<%= f.text_field :email%>
-		
-			<%= f.label :password%>
-			<%= f.text_field :password%>
-		
-			<%= f.label :password_confirmation, "Confirmation"%>
-			<%= f.text_field :password_confirmation%>
-		
-			<%= f.submit "Save changes", class: "btn btn-large btn-primary"%>
-		
-		<% end %>
+		<%= render 'form_for_user', message: "Save changes"%>
 		
 		<%= gravatar_for @user %>
-		<a href="http://gravatar.com/emails">change</a>
+		<%= link_to 'change', "http://gravatar.com/emails", target: "_blank" %>
 		
 	</div>
 </div>

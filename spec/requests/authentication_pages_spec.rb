@@ -8,8 +8,14 @@ describe "Authentication" do
   describe "signin" do
     before {visit signin_path}
     
-    it {should have_content ("Sign In")}
-    it {should have_title("Sign In")}
+    describe "without any info" do
+      it {should have_content ("Sign In")}
+      it {should have_title("Sign In")}
+      it {should_not have_link('Users', href: users_path)}
+      it {should_not have_profile_link}
+      it {should_not have_link('Settings')}
+      it {should_not have_signout_link}
+    end
     
     describe "with invalid info" do
       before {click_button "Sign in"}
@@ -114,7 +120,7 @@ describe "Authentication" do
         before {delete user_path(user)}
         specify {expect(response).to redirect_to(root_url)}
       end
-      
+          
     end
     
     describe "admin user" do

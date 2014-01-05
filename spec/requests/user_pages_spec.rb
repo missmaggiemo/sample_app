@@ -64,6 +64,7 @@ describe "User pages" do
 #           specify {expect(response).to show_error}
 #         end
 # this generates undefined method `admin?' for nil:NilClass
+# I think it's an issue with the "response" verbage, but I'm not sure-- anyway, it definitely redirects
 
       end
       
@@ -148,6 +149,16 @@ describe "User pages" do
       it {should_not have_signin_link}
       specify {expect(user.reload.name).to eq new_name}
       specify {expect(user.reload.email).to eq new_email}
+    end
+    
+    describe "forbidden attr" do
+      let(:params) do
+        {user: {admin: true, password: user.password, password_confirmation: user.password}}
+      end
+      before do
+        patch user_path(user), params
+      end
+      specify {expect(user.reload).not_to be_admin}
     end
   end
   
