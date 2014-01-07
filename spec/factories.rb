@@ -9,7 +9,16 @@ FactoryGirl.define do
       admin true
     end
   end
+  # factory for user
+  
+  factory :micropost do
+    content "Spam spam spam spam"
+    user
+  end
+  # factory for micropost
 end
+
+
 
 
 # FactoryGirl.define do

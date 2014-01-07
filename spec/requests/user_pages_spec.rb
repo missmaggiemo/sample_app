@@ -75,6 +75,7 @@ describe "User pages" do
   end
   
   describe "signup page" do
+    
     before {visit signup_path}
     let(:heading) {'Sign Up'}
     let(:page_title) {'Sign Up'}
@@ -106,6 +107,8 @@ describe "User pages" do
   
   describe "profile page" do
     let(:user) {FactoryGirl.create(:user)}
+    let!(:m1) {FactoryGirl.create(:micropost, user: user, content: "What is your quest?", created_at: 1.day.ago)}
+    let!(:m2) {FactoryGirl.create(:micropost, user: user, content: "It's just a flesh wound.", created_at: 1.minute.ago)}
     before do
       sign_in user
       visit user_path(user)
@@ -113,6 +116,12 @@ describe "User pages" do
     
     it {should have_content(user.name)}
     it {should have_title(user.name)}
+    
+    describe "microposts" do
+      it {should have_content(m1.content)}
+      it {should have_content(m2.content)}
+      it {should have_content(user.microposts.count)}
+    end
   end
   
   describe "edit" do

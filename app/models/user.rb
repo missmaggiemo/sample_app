@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :microposts, dependent: :destroy
+  # allows user.destroy to destroy microposts?
   before_save { self.email.downcase! }
   before_create :create_remember_token
   validates :name, presence: true, length: {maximum: 50}
@@ -24,6 +26,11 @@ class User < ActiveRecord::Base
   
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+  
+  def feed
+    Micropost.where("user_id = ?", id) # microposts
+    # the ? helps savoid SQL injection-- id should be properly escaped before being injected into SQL statements
   end
   
   # private methods

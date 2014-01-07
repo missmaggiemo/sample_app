@@ -3,17 +3,24 @@ SampleApp::Application.routes.draw do
   resources :users
   # this adds all the actions needed for RESTful Users resource
   resources :sessions, only: [:new, :create, :destroy]
+  resources :microposts, only: [:create, :destroy]
   
   root 'static_pages#home'
+  
+  # users
   match '/signup', to: 'users#new', via: 'get'
+  
+  # sessions
   match '/signin', to: 'sessions#new', via: 'get'
   match '/signout', to: 'sessions#destroy', via: 'delete'
   
+  # static
   match '/help', to: 'static_pages#help', via: 'get'
   match '/about', to: 'static_pages#about', via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
   
-  
+  # microposts?
+    
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

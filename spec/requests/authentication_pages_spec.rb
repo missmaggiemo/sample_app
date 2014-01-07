@@ -65,6 +65,7 @@ describe "Authentication" do
           fill_in "Password", with: user.password
           click_button "Sign in"
         end
+        after {follow_sign_out}
         
         describe "after signing in" do 
           it {should render_edit_page}
@@ -79,6 +80,7 @@ describe "Authentication" do
               expect(page).to have_h1(user.name)
             end
           end
+          
         end
       end
       
@@ -97,6 +99,22 @@ describe "Authentication" do
         describe "visiting the user index" do
           before {visit users_path}
           it {should have_title("Sign In")}
+        end
+        
+      end
+      
+      describe "in the microposts controller" do
+        
+        describe "submitting to the create action" do
+          before {post microposts_path}
+          # microposts_path, a path to all microposts, in plural
+          specify {expect(page).to redirect_to(signin_path)}
+        end
+        
+        describe "submitting to the destroy action" do
+          before {delete micropost_path(FactoryGirl.create(:micropost))}
+          # micropost_path(micropost), a path to a specific post, is not plural
+          specify {expect(page).to redirect_to(signin_path)}
         end
         
       end

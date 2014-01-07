@@ -13,6 +13,14 @@ module SessionsHelper
     !current_user.nil?
   end
   
+  def signed_in_user
+    # redirect_to signin_url, notice: "Please sign in." unless signed_in?
+    unless signed_in?
+      store_location
+      redirect_to signin_url, notice: "Please sign in."
+    end
+  end
+  
   def current_user=(user)
     # current_user= means that the method will be used specifically to assign a value, like current_user = user
     @current_user = user
