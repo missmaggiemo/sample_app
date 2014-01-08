@@ -12,8 +12,13 @@ describe User do
   
   subject {@user}
   
+  describe "authentication" do
+    it {should be_valid}
+    it {should_not be_admin}
+  end
+  
   # this is how you test to make sure you have the rigt columns in your user table 
-  describe "user table" do
+  describe "user methods" do
     it {should respond_to(:name)}
     it {should respond_to(:email)}
     it {should respond_to(:password_digest)}
@@ -24,10 +29,13 @@ describe User do
     it {should respond_to(:admin)}
     it {should respond_to(:microposts)}
     it {should respond_to(:feed)}
+    it {should respond_to(:relationships)}
+    it {should respond_to(:followed_users)}
+    it {should respond_to(:following?)}
+    it {should respond_to(:follow!)}
+    it {should respond_to(:reverse_relationships)}
+    it {should respond_to(:followers)}
     
-  
-    it {should be_valid}
-    it {should_not be_admin}
   end
   
   describe "with admin attribute set to 'true'" do
@@ -144,6 +152,8 @@ describe User do
     # same as it {expect(@user.remember_token).to_not be_blank}
   end
   
+  # test for micropost associations
+  
   describe "micropost associations" do
     before {@user.save}
     let!(:old_micropost) {FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)}
@@ -168,6 +178,32 @@ describe User do
       its(:feed) {should include(new_micropost)}
       its(:feed) {should include(old_micropost)}
       its(:feed) {should_not include(unfollowed_post)}
+    end
+    
+  end
+  
+  # test for follower/followed relationships
+  
+  describe "following" do
+    let(:other_user) {FactoryGirl.create(:user)}
+    before do
+      @user.save
+      @user.follow!(other_user)
+    end
+    
+    it {should be_following(other_user)}
+    its(:followed_users) {should include(other_user)}
+    
+    describe "followed user" do
+      subject {other_user}
+      its(:followers) {should include(@user)}
+    end
+    
+    describe "and unfollowing" do
+      before {@user.unfollow!(other_user)}
+      
+      it {should_not be_following(other_user)}
+      its(:followed_users) {should_not include(other_user)}
     end
     
   end
