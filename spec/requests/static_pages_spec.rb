@@ -20,20 +20,104 @@ describe "Static pages" do
     
     describe "for signed-in users" do
       let(:user) {FactoryGirl.create(:user)}
+      let(:user2) {FactoryGirl.create(:user)}
+      let(:user3) {FactoryGirl.create(:user)}
       before do
         FactoryGirl.create(:micropost, user: user, content: "Beware the Jabberwocky!")
         FactoryGirl.create(:micropost, user: user, content: "We're all mad here.")
-        sign_in user
-        visit root_path
+        FactoryGirl.create(:micropost, user: user2, content: "Why, sometimes I've believed as many as six impossible things before breakfast.")
       end
       
-      it "should render the user's feed" do
-        user.feed.each do |item|
-          expect(page).to have_selector("li##{item.id}", text: item.content)
+      describe "for user with multiple posts" do
+        before do
+          sign_in user
+          visit root_path
+        end
+        after {follow_sign_out}
+        
+        describe "user's feed" do
+          it "should be rendered" do
+            user.feed.each do |item|
+              expect(page).to have_selector("li##{item.id}", text: item.content)
+            end
+          end
+        
+          it {should have_link("delete")}
+        
+          it "should have correct post count" do
+            expect(page).to have_content(user.feed.count)
+          end
+          
+          it "should have correct post pluralization" do
+            expect(page).to have_content("posts")
+          end
+        end
+        
+        describe "pagination" do
+          before do
+            40.times do
+              FactoryGirl.create(:micropost, user: user)
+            end
+            visit root_path
+          end
+          
+          it {should have_selector('div.pagination')}
+        end
+        
+      end
+        
+      describe "for user with one post" do
+        before do
+          sign_in user2
+          visit root_path
+        end
+        after {follow_sign_out}
+        
+        describe "feed" do
+          it {should have_link("delete")}
+        
+          it "should have correct post count" do
+            expect(page).to have_content(user2.feed.count)
+          end
+          
+          it "should have correct post pluralization" do
+            expect(page).to have_content("post")
+          end
+          
+          it {should_not have_selector('div.pagination')}
+        end
+      end  
+        
+      describe "for user with no posts" do
+        before do
+          sign_in user3
+          visit root_path
+        end
+        after {follow_sign_out}
+      
+        describe "feed" do
+          it {should_not have_link("delete")}
+      
+          it "should have correct post count" do
+            expect(page).to have_content(user3.feed.count)
+          end
+          
+          it "should have correct post pluralization" do
+            expect(page).to have_content("posts")
+          end
+          
+          it {should_not have_selector('div.pagination')}
+        end
+        
+        describe "another user's feed" do
+          before do
+            click_link 'Users'
+            click_link user.name
+          end
+          
+          it {should_not have_link 'delete'}
         end
       end
-      
-      it {should have_link("delete")}
     end
   end
   
@@ -68,16 +152,3 @@ describe "Static pages" do
   
 end
 
-
-
-# require 'spec_helper'
-# 
-# describe "StaticPages" do
-#   describe "GET /static_pages" do
-#     it "works! (now write some real specs)" do
-#       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-#       get static_pages_index_path
-#       response.status.should be(200)
-#     end
-#   end
-# end
