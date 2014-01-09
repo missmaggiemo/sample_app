@@ -1,9 +1,16 @@
 SampleApp::Application.routes.draw do
   
-  resources :users
+  resources :users do
   # this adds all the actions needed for RESTful Users resource
+    member do
+      get :following, :followers
+      # users/1/following (following_user_path) & users/1/followers (followers_user_path)
+    end
+  end
+  
   resources :sessions, only: [:new, :create, :destroy]
   resources :microposts, only: [:create, :destroy]
+  resources :relationships, only: [:create, :destroy]
   
   root 'static_pages#home'
   

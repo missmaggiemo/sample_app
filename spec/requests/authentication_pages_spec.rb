@@ -33,7 +33,7 @@ describe "Authentication" do
       let(:user) {FactoryGirl.create(:user)}
       before {sign_in user}
             
-      it {should have_title(user.name)}
+      it {should have_h1(user.name)}
       it {should have_link('Users', href: users_path)}
       it {should have_profile_link}
       it {should have_link('Settings', href: edit_user_path(user))}
@@ -101,6 +101,16 @@ describe "Authentication" do
           it {should have_title("Sign In")}
         end
         
+        describe "visitng the following page" do
+          before {visit following_user_path(user)}
+          it {should have_title("Sign In")}
+        end
+        
+        describe "visitng the followers page" do
+          before {visit followers_user_path(user)}
+          it {should have_title("Sign In")}
+        end
+        
       end
       
       describe "in the microposts controller" do
@@ -117,6 +127,18 @@ describe "Authentication" do
           specify {expect(page).to redirect_to(signin_path)}
         end
         
+      end
+      
+      describe "in the relationships controller" do
+        describe "submitting to the create action" do
+          before {post relationships_path}
+          specify {expect(response).to redirect_to(signin_path)}
+        end
+        
+        describe "submitting to the destroy action" do
+          before {delete relationship_path(1)}
+          specify {expect(response).to redirect_to(signin_path)}
+        end
       end
     end
     

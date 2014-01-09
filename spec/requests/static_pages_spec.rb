@@ -43,13 +43,9 @@ describe "Static pages" do
           end
         
           it {should have_link("delete")}
-        
-          it "should have correct post count" do
-            expect(page).to have_content(user.feed.count)
-          end
           
           it "should have correct post pluralization" do
-            expect(page).to have_content("posts")
+            expect(page).to have_selector('span', text: "#{user.feed.count} posts")
           end
         end
         
@@ -64,6 +60,17 @@ describe "Static pages" do
           it {should have_selector('div.pagination')}
         end
         
+        describe "follower/following counts" do
+          before do
+            user2.follow!(user)
+            user.follow!(user2)
+            user.follow!(user3)
+            visit root_path
+          end
+          it {should have_link("2 following", href: following_user_path(user))}
+          it {should have_link("1 followers", href: followers_user_path(user))}
+        end
+        
       end
         
       describe "for user with one post" do
@@ -73,15 +80,12 @@ describe "Static pages" do
         end
         after {follow_sign_out}
         
-        describe "feed" do
-          it {should have_link("delete")}
+        # it {should_not have_link("0 followers")}
+        # for some reason, user2 and user3 don't keep user as a follower after user signs out-- why?
         
-          it "should have correct post count" do
-            expect(page).to have_content(user2.feed.count)
-          end
-          
-          it "should have correct post pluralization" do
-            expect(page).to have_content("post")
+        describe "feed" do
+          it "should have correct post count & pluralization" do
+            expect(page).to have_selector('span', text: '1 post')
           end
           
           it {should_not have_selector('div.pagination')}
@@ -96,17 +100,9 @@ describe "Static pages" do
         after {follow_sign_out}
       
         describe "feed" do
-          it {should_not have_link("delete")}
-      
-          it "should have correct post count" do
-            expect(page).to have_content(user3.feed.count)
+          it "should have correct post coutnt & pluralization" do
+            expect(page).to have_selector('span', text: '0 posts')
           end
-          
-          it "should have correct post pluralization" do
-            expect(page).to have_content("posts")
-          end
-          
-          it {should_not have_selector('div.pagination')}
         end
         
         describe "another user's feed" do
