@@ -47,8 +47,9 @@ class User < ActiveRecord::Base
   
   # feed and follow/following
   def feed
-    Micropost.where("user_id = ?", id) # microposts
+    # Micropost.where("user_id = ?", id) # microposts
     # the ? helps savoid SQL injection-- id should be properly escaped before being injected into SQL statements
+    Micropost.from_users_followed_by(self)
   end
   
   def following?(other_user)
