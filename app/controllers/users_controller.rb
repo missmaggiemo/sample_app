@@ -66,7 +66,7 @@ class UsersController < ApplicationController
       flash[:success] = "Profile updated"
       # sign_in @user
       # was having problem with specs-- you shouldn't be able to update user info w/out being signed in
-      redirect_to root_path
+      redirect_to @user
     else
       render 'edit'
     end
