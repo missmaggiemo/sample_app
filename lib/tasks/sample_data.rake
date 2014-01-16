@@ -10,13 +10,14 @@ namespace :db do
   
   # this creates fake users
   def make_users
-    admin = User.create!(name: "Bugs Bunny", email: "Bugs@bunny.com", password: "whatsupdoc", password_confirmation: "whatsupdoc", admin: true)
-    non_admin = User.create!(name: "Elmer Fudd", email: "Elmer@fudd.com", password: "huntingwabbits", password_confirmation: "huntingwabbits")
+    admin = User.create!(name: "Bugs Bunny", email: "Bugs@bunny.com", username: "bugsbunny", password: "whatsupdoc", password_confirmation: "whatsupdoc", admin: true)
+    non_admin = User.create!(name: "Elmer Fudd", email: "Elmer@fudd.com", username: "bunnyhunter", password: "huntingwabbits", password_confirmation: "huntingwabbits")
     99.times do |n|
       name = Faker::Name.name
+      username = name.split.join
       email = "bunny-#{n+1}@toons.com"
       password = "looneytoons"
-      User.create!(name: name, email: email, password: password, password_confirmation: password)
+      User.create!(name: name, email: email, username: username, password: password, password_confirmation: password)
     end
   end
     

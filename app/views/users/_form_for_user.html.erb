@@ -7,12 +7,15 @@
 
 	<%= f.label :email%>
 	<%= f.text_field :email%>
+	
+	<%= f.label :username %>
+	<%= f.text_field :username %>
 
 	<%= f.label :password%>
-	<%= f.text_field :password%>
+	<%= f.password_field :password%>
 
 	<%= f.label :password_confirmation, "Confirmation"%>
-	<%= f.text_field :password_confirmation%>
+	<%= f.password_field :password_confirmation%>
 
 	<%= f.submit message, class: "btn btn-large btn-primary"%>
 	<!-- message is passed as a local variable -->

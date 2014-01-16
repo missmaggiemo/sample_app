@@ -39,8 +39,10 @@ def sign_in(user, options={})
 end
 
 def create_tom_cat
+  visit signup_path
   fill_in "Name", with: "Tom"
   fill_in "Email", with: "Tom@cat.com"
+  fill_in "Username", with: "tomcat"
   fill_in "Password", with: "sammycat"
   fill_in "Confirmation", with: "sammycat"
   click_button "Create my account"

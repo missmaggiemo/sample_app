@@ -8,7 +8,7 @@ require 'spec_helper'
 
 describe User do
   
-  before {@user = User.new(name: "Douglas", email: "Douglas@adams.com", password: "dontpanic", password_confirmation: "dontpanic")}
+  before {@user = User.new(name: "Douglas", email: "Douglas@adams.com", username: "dougie", password: "dontpanic", password_confirmation: "dontpanic")}
   
   subject {@user}
   
@@ -104,11 +104,30 @@ describe User do
     it {should_not be_valid}
   end
   
+  # username stuff
+  
+  describe "when username is not present" do
+    before do
+      @user = User.new(name: "Tom", email: "Tom@Jerry.com", username: "", password: "tomcat", password_confirmation: "tomcat")
+    end
+    it {should_not be_valid}
+  end
+  
+  describe "when username is already taken" do
+    before  do
+      user_with_same_username = @user.dup
+      user_with_same_username.username = @user.username.upcase
+      user_with_same_username.save
+    end
+    
+    it {should_not be_valid}
+  end
+  
   # test for password stuff-- presence
   
   describe "when password is not present" do
     before do
-      @user = User.new(name: "Tom", email: "Tom@Jerry.com", password: "", password_confirmation: "")
+      @user = User.new(name: "Tom", email: "Tom@Jerry.com", username: "tomcat", password: "", password_confirmation: "")
     end
     it {should_not be_valid}
   end

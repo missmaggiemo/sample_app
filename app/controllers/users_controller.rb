@@ -92,7 +92,7 @@ class UsersController < ApplicationController
   # users should not be able to access/edit all user account info-- for example, if there are admin users, there would be an admin parameter in the DB and if a user had access to that, he could make himself an admin
   def user_params
     # strong params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :username, :password, :password_confirmation)
   end
   
   # before filters

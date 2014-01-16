@@ -95,7 +95,7 @@ describe "User pages" do
     
       describe "with brand-new valid info" do
         before {create_tom_cat}
-                
+        
         it {should have_signout_link}
         it {should have_name_in_title}
         it {should_not show_error}
@@ -187,9 +187,11 @@ describe "User pages" do
     describe "with valid info" do
       let(:new_name) {"Silvester"}
       let(:new_email) {"silvester@cat.com"}
+      let(:new_username) {"silvester"}
       before do
         fill_in "Name", with: new_name
         fill_in "Email", with: new_email
+        fill_in "Username", with: new_username
         fill_in "Password", with: user.password
         fill_in "Confirmation", with: user.password
         click_button "Save changes"
