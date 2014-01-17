@@ -25,8 +25,8 @@ class Micropost < ActiveRecord::Base
   private
   
   def extract_in_reply_to
-    if match = @@reply_regex.match(content).to_s[1..-1] # downcase can't be here because if this is nil, downcase method raises an error
-      user = User.find_by(username: match.downcase)
+    if match = @@reply_regex.match(content) # downcase can't be here because if this is nil, downcase method raises an error
+      user = User.find_by(username: match.to_s.downcase[1..-1])
       self.in_reply_to = user if user
     end
     # why does this work when I haven't specified how rails should find in_reply_to_id-- I just specified in_reply_to
