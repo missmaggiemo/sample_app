@@ -25,7 +25,7 @@ describe "Static pages" do
       before do
         FactoryGirl.create(:micropost, user: user, content: "Beware the Jabberwocky!")
         FactoryGirl.create(:micropost, user: user, content: "We're all mad here.")
-        FactoryGirl.create(:micropost, user: user2, content: "Why, sometimes I've believed as many as six impossible things before breakfast.")
+        FactoryGirl.create(:micropost, user: user2, content: "@#{user.username} Why, sometimes I've believed as many as six impossible things before breakfast.")
       end
       
       describe "for user with multiple posts" do
@@ -45,7 +45,12 @@ describe "Static pages" do
           it {should have_link("delete")}
           
           it "should have correct post pluralization" do
-            expect(page).to have_selector('span', text: "#{user.feed.count} posts")
+            expect(page).to have_selector('span', text: "#{user.microposts.count} posts")
+            # expect(page).to have_selector('span', text: "2 posts")
+          end
+          
+          it "should have reply" do
+            expect(page).to have_content("@#{user.username} Why, sometimes I've believed as many as six impossible things before breakfast.")
           end
         end
         

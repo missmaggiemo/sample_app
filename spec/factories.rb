@@ -15,18 +15,12 @@ FactoryGirl.define do
   factory :micropost do
     content "Spam spam spam spam"
     user
+    
+    factory :reply do
+      sequence(:content) {|n| "@person_#{n} spam spam spam!"}
+    end
+    
   end
   # factory for micropost
 end
 
-
-
-
-# FactoryGirl.define do
-#   factory :user do
-#     name "Tweety"
-#     email "tweety@bird.com"
-#     password "puddycat"
-#     password_confirmation "puddycat"
-#   end
-# end

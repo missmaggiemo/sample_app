@@ -15,21 +15,40 @@ end
 
 # Extensions
 
-unique IDs
 
-@reply
+#### @reply
 
-messaging
+*replies show up in the feeds of the op (original poster) and reply person-- only?*
 
-follower notifications
+*one post can reply to multiple users?*
 
-password reminders-- and password hiding!
 
-signup confirmation email?
+#### messaging
 
-RSS feed
+*direct messaging?*
 
-REST API
+*entire new table for messages, new page for displaying messages*
 
-Search
+*drop-down menu with the number of messages that you have or haven't read?, e.g., Messages (10)*
+
+
+#### follower notifications
+
+*e.g., email when a user gets direct-messaged? replied to?*
+
+
+#### password reminders
+
+*password reminder emails?*
+
+#### signup confirmation email?
+
+
+#### RSS feed
+
+
+#### REST API
+
+
+#### Search
 

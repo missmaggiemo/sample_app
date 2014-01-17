@@ -14,7 +14,7 @@ namespace :db do
     non_admin = User.create!(name: "Elmer Fudd", email: "Elmer@fudd.com", username: "bunnyhunter", password: "huntingwabbits", password_confirmation: "huntingwabbits")
     99.times do |n|
       name = Faker::Name.name
-      username = name.split.join
+      username = name.scan(/\w+/).join
       email = "bunny-#{n+1}@toons.com"
       password = "looneytoons"
       User.create!(name: name, email: email, username: username, password: password, password_confirmation: password)
@@ -24,9 +24,13 @@ namespace :db do
     # creates fake posts
   def make_microposts
     users = User.all(limit: 6)
-    50.times do
+    40.times do
       content = Faker::Lorem.sentence(5)
       users.each {|user| user.microposts.create(content: content)}
+    end
+    10.times do |i|
+      content = "Spam spam spam!"
+      users.each {|user| user.microposts.create(content: "@#{User.find(i+1).username} #{content}")}
     end
   end
   
@@ -42,22 +46,3 @@ namespace :db do
   
 end
   
-#   task populate: :environment do
-#     admin = User.create!(name: "Bugs", email: "Bugs@bunny.com", password: "whatsupdoc", password_confirmation: "whatsupdoc")
-#     99.times do |n|
-#       name = Faker::Name.name
-#       email = "bunny-#{n+1}@toons.com"
-#       password = "looneytoons"
-#       User.create!(name: name, email: email, password: password, password_confirmation: password)
-#     end
-#     
-#     # creates fake posts
-#     users = User.all(limit: 6)
-#     50.times do
-#       content = Faker::Lorem.sentence(5)
-#       users.each {|user| user.microposts.create(content: content)}
-#     end
-#   end
-#   
-#   
-# end

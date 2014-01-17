@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   # allows user.destroy to destroy microposts as well as the user
   # rails infers a foreign_key relationship in the form <class>_id, like user_id in the microposts case
   
+  has_many :replies, foreign_key: "in_reply_to_id", class_name: "Micropost"
+  
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   # 'follower' isn't a class, so we need to specify foreign_key: "follower_id"
   has_many :followed_users, through: :relationships, source: :followed
@@ -16,7 +18,8 @@ class User < ActiveRecord::Base
   
   # validation of username
   before_save {self.username.downcase!}
-  validates :username, presence: true, length: {minimum: 5}, uniqueness: {case_sensitive: false}
+  VALID_USERNAME_REGEX = /\A[\w+\-.]+\z/i
+  validates :username, presence: true, format: {with: VALID_USERNAME_REGEX}, length: {minimum: 5}, uniqueness: {case_sensitive: false}
   
   # email stuff
   before_save { self.email.downcase! }
@@ -53,7 +56,7 @@ class User < ActiveRecord::Base
   def feed
     # Micropost.where("user_id = ?", id) # microposts
     # the ? helps savoid SQL injection-- id should be properly escaped before being injected into SQL statements
-    Micropost.from_users_followed_by(self)
+    Micropost.from_users_followed_by_including_replies(self)
   end
   
   def following?(other_user)
