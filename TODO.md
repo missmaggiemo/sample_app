@@ -20,7 +20,7 @@ end
 
 *replies show up in the feeds of the op (original poster) and reply person-- only?*
 
-*one post can reply to multiple users?*
+*one post can reply to multiple users? can you store a list in a db entry? maybe store multiple copies of the post and filter out the duplicates?*
 
 
 #### messaging
